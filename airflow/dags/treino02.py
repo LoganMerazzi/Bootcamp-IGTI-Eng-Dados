@@ -1,4 +1,3 @@
-# Primeira Dag com o Airflow
 import pandas as pd
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
