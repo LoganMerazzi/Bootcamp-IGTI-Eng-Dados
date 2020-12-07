@@ -3,4 +3,5 @@ Twitter/.vscode/
 Enade/enade2019/
 *.txt
 Twitter/tweet.json
-airflow/dags/__pycache__/
+__pycache__/
+
