@@ -1,4 +1,5 @@
 .ipynb_checkpoints/
-./Twitter/.vscode/
+Twitter/.vscode/*
 Enade/enade2019/*
 *.txt
+Twitter/tweet.json
