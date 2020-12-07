@@ -16,3 +16,14 @@ airflow webserver -p 8080
 airflow scheduler
 
 # visit localhost:8080 in the browser and enable the example dag in the home page
+
+
+Para simular um ambiente do Airflow na nuvem na sua máquina local, utilize o docker & docker-compose.
+https://github.com/puckel/docker-airflow
+
+Será baixado no docker o redis, o postgres, o flower, o webserver, o scheduler e o worker (validar no arquivo docker-compose.yml)
+
+Para iniciar: $ docker-compose up -d
+Para parar: $ docker-compose down
+
+Para alterar algum parametro, como a quantidade de workers: $ docker-compose up -d --scale worker=3
