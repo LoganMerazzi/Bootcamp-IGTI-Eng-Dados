@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from datetime import datetime, timedelta
+import sqlalchemy
 
 # Constantes
 data_path = '/home/logan/microdados_enade_2019/2019/3.DADOS/'
@@ -155,10 +156,21 @@ task_join = PythonOperator(
     dag=dag
 )
 
+def escreve_dw():
+    final = pd.read_csv(data_path+'enade_tratado.csv')
+    engine = sqlalchemy.create_engine(
+        "mssql:pyodbc://SA:P@$$w0rd@127.0.0.1/enade?driver=ODBC+Driver+17+for+SQL+Server"
+    )
+    final.to_sql("tratado", con=engine, index=False, if_exists='append')
+
+task_escreve_dw = PythonOperator(
+    task_id='escreve_dw',
+    python_callable=escreve_dw,
+    dag=dag
+)
+
 start_preprocessing >> get_data >> unzip_data >> task_aplica_filtro
 task_aplica_filtro >> [task_idade_cent, task_est_civil, task_cor]
 task_idade_quad.set_upstream(task_idade_cent) # Informa que a task deve vir após a task_idade_cent
-
-task_join.set_upstream([
-  task_est_civil, task_cor, task_idade_quad
-])
+task_join.set_upstream([task_est_civil, task_cor, task_idade_quad])
+task_join >> task_escreve_dw
